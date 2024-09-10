@@ -1,0 +1,23 @@
+body{
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 380px;
+    min-height: 600px;
+    background-color: #fff;
+    justify-content: center;
+    font-family: 'Rubik', sans-serif; 
+
+}
+  
+#root{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  
+    width: 380px;
+    height: 600px;
+
+    background: #323437;
+}

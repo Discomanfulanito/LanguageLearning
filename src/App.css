@@ -1,0 +1,104 @@
+.App-search
+{
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 11px;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+
+  width: 360px;
+  height: 60px;
+  border-radius: 12px;
+
+  box-shadow: 0px 4px 4px rgba(0,0,0, 0.5);
+  background-color: #B3B3B3;
+}
+
+.App-search-icon
+{
+  position: absolute;
+  right: 10px;
+
+  width: 40px;
+  height: 40px;
+}
+.App-search-icon:hover
+{
+  cursor: pointer;
+}
+
+.App-search-input
+{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #757575;
+  font-size: 20px;
+  text-align: center;
+
+}
+.App-search-input:focus {
+  border: none;
+}
+.App-search-input::placeholder{
+  color: #757575
+}
+
+
+
+.App-options-container
+{
+  display: flex;
+  justify-content: space-around;
+
+  margin-bottom: 0px;
+
+  width: 100%;
+  height: 100px;
+
+  background-color: #4A4F54;
+}
+
+.App-option
+{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-options-icon
+{
+  margin-top: 14px;
+  width: 45px;
+  height: 45px;
+}
+
+.App-options-icon:hover
+{
+  cursor: pointer;
+}
+
+.App-options-text
+{
+  font-size: 13px;
+  font-family: 'Roboto Mono', monospace;
+}
+.App-options-text:hover
+{
+  cursor: pointer;
+}
+
+
+.App-result-container
+{
+  width: 300px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none;  /* Para IE y Edge */
+
+}
