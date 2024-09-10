@@ -1,5 +1,5 @@
 import './App.css'
-import { Result } from './components/Result.jsx'
+import { Result } from '../Result/Result.jsx'
 import React, { useState } from 'react'
 
 // Diccionario temporal para pruebas,
@@ -19,14 +19,16 @@ const diccionario = [
 
 
 export function App(){
+    // 
     const [inputValue, setInputValue] = useState('');
     const [results, setResults] = useState([]);
+
+    // función para cargar resultados al dar al enter
     const load = (event) => {
         if(event.key==='Enter')
         {
             
             event.preventDefault();
-
             const newresults = []
 
             // AQUÍ IRIA TU FUNCIÓN PARA FILTRAR LAS PALABRAS
@@ -73,8 +75,12 @@ export function App(){
                     <span className='App-options-text'>difficulty</span>
                 </div>
                 <div className='App-option'>
-                    <img src="/assets/cards-icon.svg" alt="flashcards icon" className='App-options-icon cards-icon'/>
-                    <span className='App-options-text'>flashcards</span>
+                    <a href='https://www.youtube.com/watch?v=cofqLIrLkko' target='_blank'>
+                        <img src="/assets/cards-icon.svg" alt="flashcards icon" className='App-options-icon cards-icon' href='https://www.youtube.com/watch?v=cofqLIrLkko'/>
+                    </a>
+                    <a href='https://www.youtube.com/watch?v=cofqLIrLkko' target='_blank'>
+                        <span className='App-options-text' href='https://www.youtube.com/watch?v=cofqLIrLkko'>flashcards</span>
+                    </a>                
                 </div>
             </div>
         </>
