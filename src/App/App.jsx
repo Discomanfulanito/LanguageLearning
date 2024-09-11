@@ -75,11 +75,11 @@ export function App(){
                     <span className='App-options-text'>difficulty</span>
                 </div>
                 <div className='App-option'>
-                    <a href='https://www.youtube.com/watch?v=cofqLIrLkko' target='_blank'>
+                    <a href='' target='_blank'>
                         <img src="/assets/cards-icon.svg" alt="flashcards icon" className='App-options-icon cards-icon' href='https://www.youtube.com/watch?v=cofqLIrLkko'/>
                     </a>
-                    <a href='https://www.youtube.com/watch?v=cofqLIrLkko' target='_blank'>
-                        <span className='App-options-text' href='https://www.youtube.com/watch?v=cofqLIrLkko'>flashcards</span>
+                    <a href='' target='_blank'>
+                        <span className='App-options-text' href=''>flashcards</span>
                     </a>                
                 </div>
             </div>
