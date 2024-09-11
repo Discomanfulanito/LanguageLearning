@@ -1,50 +1,42 @@
 import './App.css'
 import { Result } from '../Result/Result.jsx'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-// Diccionario temporal para pruebas,
-    // luego tu usarás la base de datos me imagino
-const diccionario = [
-    {
-        original: "Alga",
-        translation: "Seaweed",
-        description: "Idk, some crazy shit"
-    },
-    {
-        original: "Botón",
-        translation: "Button",
-        description: "Idk, some crazy shit"
-    }
-]
+import Trie from '/TRIE.js'
+
 
 
 export function App(){
     // 
     const [inputValue, setInputValue] = useState('');
     const [results, setResults] = useState([]);
+    const [trie, setTrie] = useState(null);
+
+    useEffect(() => {
+        const initializeTrie = async () => {
+            const newtrie = new Trie();
+            const dictPath = '/LanguageData/Spanish/dict.json'
+
+            await newtrie.buildDict(dictPath);
+            setTrie(newtrie);
+        }
+        initializeTrie();
+    }, []);
 
     // función para cargar resultados al dar al enter
     const load = (event) => {
-        if(event.key==='Enter')
+        const newResults = []
+        if (event.key ==='Enter')
         {
-            
-            event.preventDefault();
-            const newresults = []
-
-            // AQUÍ IRIA TU FUNCIÓN PARA FILTRAR LAS PALABRAS
-                // debes hacer un push a newresults, el diccionario que he creado es temporal,
-                // tu ya verás como lo haces xd, si haces una call a otro programa o como pero la idea es esa
-                // pushearla a newresults con el formato {original, translation, description}
-            diccionario.forEach(word => {
-                if (word.original === inputValue)
-                {
-                    newresults.push(word)
-                }
-            })
-            // -------------------------------------------------------------------------------------------------
-
-            setResults(newresults)
+            event.preventDefault()
+            console.log(event.key)
         }
+        else if(trie){
+            const searchResults = trie.searchPrefix(inputValue);
+            console.log(searchResults)
+           
+        }
+ 
     };
 
     return(

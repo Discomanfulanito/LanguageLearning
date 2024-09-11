@@ -1,3 +1,6 @@
+import fs from "fs/promises";
+
+
 class TrieNode {
     constructor() {
         this.children = {};
@@ -59,26 +62,25 @@ class Trie {
 
         return results;
     }
+
+    // 
+    async buildDict(_path)
+    {
+        try {
+            // Leer el archivo JSON
+            const data = await fetch(_path);
+            const dictionary = await data.json();
+
+            // Insertar cada entrada del diccionario en el Trie
+            for (const entry of dictionary) {
+                this.insert(entry.word, entry);
+            }
+            console.log('Dictionary loaded and Trie updated.');
+        } catch (error) {
+            console.error('Error loading dictionary:', error);
+         
+        }
+    }
 }
-const fs = require('fs');
-const path = require('path');
 
-const dictPath = path.join('LanguageLearning', 'LanguageData', 'Spanish', 'dict.json');
-
-// Load dictionary from a JSON file
-const dictionaryData = JSON.parse(fs.readFileSync(dictPath, 'utf-8'));
-
-const trie = new Trie();
-for (const entry of dictionaryData) {
-    trie.insert(entry.word, entry);
-}
-
-
-const prefix = 'fie';
-const results = trie.searchPrefix(prefix);
-
-if (results.length > 0) {
-    console.log('Words with prefix:', results);
-} else {
-    console.log('No words found with this prefix');
-}
+export default Trie;
