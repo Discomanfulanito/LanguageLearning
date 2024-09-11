@@ -25,16 +25,27 @@ export function App(){
 
     // función para cargar resultados al dar al enter
     const load = (event) => {
-        const newResults = []
-        if (event.key ==='Enter')
+
+        let newResults = []
+        if (event.key ==='Enter' || event.key === 'CapsLock')
         {
             event.preventDefault()
-            console.log(event.key)
+            console.log('prevented %s',event.key)
         }
         else if(trie){
+            console.log(inputValue)
             const searchResults = trie.searchPrefix(inputValue);
-            console.log(searchResults)
-           
+            
+            searchResults.forEach((new_result) =>
+            {
+                newResults.push({
+                    original: new_result.entry.word,
+                    translation: 'idk',
+                    description: 'idk'
+                })
+            })
+            
+            setResults(newResults)
         }
  
     };
@@ -43,7 +54,7 @@ export function App(){
         <>
             <div className="App-search">
                 <img src="/assets/search-icon.png" alt="search icon" className="App-search-icon" />
-                <input type="text" value={inputValue} className="App-search-input" placeholder="Search words..." onKeyDown={load} onChange={(e) => setInputValue(e.target.value)} />
+                <input type="text" value={inputValue} className="App-search-input" placeholder="Search words..." onKeyUp={load} onChange={(e) => setInputValue(e.target.value)}/>
             </div>
             <section className='App-result-container'>
                 {results.map((result, index) => (

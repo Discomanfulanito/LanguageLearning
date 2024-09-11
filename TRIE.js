@@ -51,7 +51,7 @@ class Trie {
     // Helper method to collect words with the given prefix
     collectWords(node, prefix) {
         const results = [];
-
+        
         if (node.link) {
             results.push({ word: prefix, entry: node.link });
         }
