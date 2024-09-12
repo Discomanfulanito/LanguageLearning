@@ -7,11 +7,12 @@ import Trie from '/TRIE.js'
 
 
 export function App(){
-    // 
+    // Initialize States 
     const [inputValue, setInputValue] = useState('');
     const [results, setResults] = useState([]);
     const [trie, setTrie] = useState(null);
-
+  
+    
     useEffect(() => {
         const initializeTrie = async () => {
             const newtrie = new Trie();
@@ -41,7 +42,7 @@ export function App(){
                 searchResults.forEach((new_result) =>
                 {
                 newResults.push({
-                    original: new_result.entry.word,
+                    word: new_result.entry.word,
                     description: new_result.entry.gloss[0] ? new_result.entry.gloss[0] : 'No description for the moment'
                     })
                 })
@@ -51,7 +52,7 @@ export function App(){
             else{
                 setResults([
                     {
-                        original: 'No results found',
+                        word: 'No results found',
                         description: '',
                     }
                 ])
@@ -70,7 +71,7 @@ export function App(){
                 {results.map((result, index) => (
                     <Result 
                         key={index}
-                        original = {result.original}
+                        word = {result.word}
                         description={result.description}
                     />
                 ))}

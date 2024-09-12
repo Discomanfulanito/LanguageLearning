@@ -1,5 +1,5 @@
 
-.search-result-entry 
+.search-result 
 {
   display: flex;
   flex-direction: column;
@@ -11,12 +11,12 @@
   transition: background-color 0.1s;
 }
 
-.search-result-entry:hover{
+.search-result:hover{
   background-color: #4a4f54;
   cursor: pointer;
 }
 
-.search-result-entry-translate
+.search-result section
 {
   display: flex;
   flex-direction: row;
@@ -30,12 +30,12 @@
   color: #fff;
 }
 
-.search-result-entry aside
+.search-result aside
 {
   display: flex;
 }
 
-.search-result-original
+.search-result-word
 {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -46,7 +46,7 @@
 
 }
 
-.search-result-entry-description
+.search-result-description
 {
   margin-top: 0px;
   font-size: 14px;
