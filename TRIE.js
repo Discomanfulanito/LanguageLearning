@@ -45,7 +45,8 @@ class Trie {
             }
             node = node.children[char];
         }
-        return this.collectWords(node, prefix);
+        return this.collectWords(node, prefix).slice(0,10);
+        
     }
 
     // Helper method to collect words with the given prefix

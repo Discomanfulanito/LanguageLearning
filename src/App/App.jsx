@@ -27,25 +27,35 @@ export function App(){
     const load = (event) => {
 
         let newResults = []
-        if (event.key ==='Enter' || event.key === 'CapsLock')
+        if (inputValue === ''){
+            setResults([])
+        } else if (event.key ==='Enter' || event.key === 'CapsLock')
         {
             event.preventDefault()
             console.log('prevented %s',event.key)
         }
-        else if(trie){
-            console.log(inputValue)
+        else if(trie && inputValue !== ''){
             const searchResults = trie.searchPrefix(inputValue);
-            
-            searchResults.forEach((new_result) =>
+            if (searchResults.length != 0)
             {
+                searchResults.forEach((new_result) =>
+                {
                 newResults.push({
                     original: new_result.entry.word,
-                    translation: 'idk',
-                    description: 'idk'
+                    description: new_result.entry.gloss[0] ? new_result.entry.gloss[0] : 'No description for the moment'
+                    })
                 })
-            })
             
             setResults(newResults)
+            }
+            else{
+                setResults([
+                    {
+                        original: 'No results found',
+                        description: '',
+                    }
+                ])
+            }
         }
  
     };
@@ -61,7 +71,6 @@ export function App(){
                     <Result 
                         key={index}
                         original = {result.original}
-                        translation={result.translation}
                         description={result.description}
                     />
                 ))}
