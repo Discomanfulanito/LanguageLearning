@@ -42,20 +42,43 @@ class Trie {
             }
             node = node.children[char];
         }
-        return this.collectWords(node, prefix);
+        return this.collectWords(node, prefix, null);
     }
 
-    // Helper method to collect words with the given prefix
-    collectWords(node, prefix) {
+    searchPrefix(prefix, cap) {
+        let i = 0;
+        let node = this.root;
+        for (let char of prefix) {
+            if (!node.children[char]) {
+                return []; // Prefix not found
+            }
+            node = node.children[char];
+        }
+        return this.collectWords(node, prefix, cap);
+    }
+
+    // Helper method to collect words with the given prefix and cap
+    collectWords(node, prefix, cap) {
         const results = [];
+        if (!cap) cap = Infinity;
 
-        if (node.link) {
-            results.push({ word: prefix, entry: node.link });
-        }
+        // Helper function to recursively collect words
+        const collectRecursive = (node, currentPrefix) => {
+            // Stop collecting if we've reached the cap
+            if (results.length >= cap) return;
 
-        for (let char in node.children) {
-            results.push(...this.collectWords(node.children[char], prefix + char));
-        }
+            if (node.link) {
+                results.push({ word: currentPrefix, entry: node.link });
+            }
+
+            for (let char in node.children) {
+                if (results.length >= cap) return;
+                collectRecursive(node.children[char], currentPrefix + char);
+            }
+        };
+
+        // Start collecting from the given node
+        collectRecursive(node, prefix);
 
         return results;
     }
@@ -72,13 +95,5 @@ const trie = new Trie();
 for (const entry of dictionaryData) {
     trie.insert(entry.word, entry);
 }
-
-
-const prefix = 'fie';
-const results = trie.searchPrefix(prefix);
-
-if (results.length > 0) {
-    console.log('Words with prefix:', results);
-} else {
-    console.log('No words found with this prefix');
-}
+    
+console.log(trie.searchPrefix("ala", 5));
