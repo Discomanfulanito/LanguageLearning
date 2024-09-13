@@ -72,7 +72,16 @@ class Trie {
             if (results.length >= cap) return;
 
             if (node.link) {
-                results.push({ word: currentPrefix, entry: node.link });
+                // If word is unique (no declinations, etc), add and skip steps
+                if (node.link.link == 0){ results.push({ word: currentPrefix, entry: node.link }); return;}
+                // Else add the root word in case it's not already added
+                else {
+                    const exists = results.some(item => item.word === node.link.link);
+                    if (!exists){
+                        if (node.link.link != currentPrefix)
+                            results.push({ word: node.link.link, entry: this.search(node.link.link) });
+                        else results.push({ word: currentPrefix, entry: node.link }); }
+                }
             }
 
             for (let char in node.children) {

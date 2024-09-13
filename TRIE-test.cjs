@@ -68,7 +68,16 @@ class Trie {
             if (results.length >= cap) return;
 
             if (node.link) {
-                results.push({ word: currentPrefix, entry: node.link });
+                // If word is unique (no declinations, etc), add and skip steps
+                if (node.link.link == 0){ results.push({ word: currentPrefix, entry: node.link }); return;}
+                // Else add the root word in case it's not already added
+                else {
+                    const exists = results.some(item => item.word === node.link.link);
+                    if (!exists){
+                        if (node.link.link != currentPrefix)
+                            results.push({ word: node.link.link, entry: this.search(node.link.link) });
+                        else results.push({ word: currentPrefix, entry: node.link }); }
+                }
             }
 
             for (let char in node.children) {
@@ -86,7 +95,7 @@ class Trie {
 const fs = require('fs');
 const path = require('path');
 
-const dictPath = path.join('LanguageLearning', 'LanguageData', 'Spanish', 'dict.json');
+const dictPath = path.join('LanguageLearning', 'public', 'LanguageData', 'Spanish', 'dict.json');
 
 // Load dictionary from a JSON file
 const dictionaryData = JSON.parse(fs.readFileSync(dictPath, 'utf-8'));
@@ -96,4 +105,4 @@ for (const entry of dictionaryData) {
     trie.insert(entry.word, entry);
 }
     
-console.log(trie.searchPrefix("ala", 5));
+console.log(trie.searchPrefix("en", 100));
