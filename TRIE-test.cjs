@@ -1,6 +1,3 @@
-import fs from "fs/promises";
-
-
 class TrieNode {
     constructor() {
         this.children = {};
@@ -48,7 +45,6 @@ class Trie {
         return this.collectWords(node, prefix, null);
     }
 
-    // Capped version
     searchPrefix(prefix, cap) {
         let i = 0;
         let node = this.root;
@@ -86,25 +82,18 @@ class Trie {
 
         return results;
     }
-
-    // Método para construir el diccionario
-    async buildDict(_path)
-    {
-        try {
-            // Leer el archivo JSON
-            const data = await fetch(_path);
-            const dictionary = await data.json();
-
-            // Insertar cada entrada del diccionario en el Trie
-            for (const entry of dictionary) {
-                this.insert(entry.word, entry);
-            }
-            console.log('Dictionary loaded and Trie updated.');
-        } catch (error) {
-            console.error('Error loading dictionary:', error);
-         
-        }
-    }
 }
+const fs = require('fs');
+const path = require('path');
 
-export default Trie;
+const dictPath = path.join('LanguageLearning', 'LanguageData', 'Spanish', 'dict.json');
+
+// Load dictionary from a JSON file
+const dictionaryData = JSON.parse(fs.readFileSync(dictPath, 'utf-8'));
+
+const trie = new Trie();
+for (const entry of dictionaryData) {
+    trie.insert(entry.word, entry);
+}
+    
+console.log(trie.searchPrefix("ala", 5));
