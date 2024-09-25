@@ -1,10 +1,3 @@
-class TrieNode {
-    constructor() {
-        this.children = {};
-        this.link = null; // This will hold the dictionary entry or null
-    }
-}
-
 class Trie {
     constructor() {
         this.root = new TrieNode();
@@ -27,7 +20,14 @@ class Trie {
             }
             node = node.children[char];
         }
-        node.link = link; // Store the link to the dictionary entry
+
+        // Instead of overwriting, store both the normalized and original word
+        if (!node.link) {
+            node.link = link; // Store the dictionary link or entry
+            node.originalWords = []; // Store the original words
+        }
+
+        node.originalWords.push(word); // Add the original word to the node
     }
 
     // Method for search
@@ -40,7 +40,15 @@ class Trie {
             }
             node = node.children[char];
         }
-        return node.link; // Return the dictionary entry if it exists
+        if (node.originalWords && node.originalWords.length > 0) {
+            for (let entry of node.originalWords) {
+                if (entry.word === word) { // Compare the original word
+                    return { link: entry }; // Return the exact match
+                }
+            }
+        }
+
+        return node.link ? { link: node.link } : null; // Return both the dictionary entry and original words
     }
 
     // Method for prefix search
@@ -67,20 +75,10 @@ class Trie {
             if (results.length >= cap) return;
 
             if (node.link) {
-                // If word is unique (no declinations, etc), add and skip steps
-                if (node.link.link == 0){ 
-                    results.push({ word: currentPrefix, entry: node.link }); 
-                    return;
-                }
-                // Else add the root word in case it's not already added
-                else {
-                    const exists = results.some(item => item.word === node.link.link);
-                    if (!exists){
-                        if (node.link.link != currentPrefix)
-                            results.push({ word: node.link.link, entry: this.search(node.link.link) });
-                        else results.push({ word: currentPrefix, entry: node.link }); 
-                    }
-                }
+                // For each original word stored, return the dictionary entry
+                node.originalWords.forEach(originalWord => {
+                    results.push({ word: originalWord, entry: node.link });
+                });
             }
 
             for (let char in node.children) {
@@ -96,6 +94,75 @@ class Trie {
     }
 }
 
+class TrieNode {
+    constructor() {
+        this.children = {};
+        this.link = null;
+        this.originalWords = [];
+    }
+}
+
+function parseText(trie, text) {
+    const results = [];
+    let i = 0;
+
+    // Keep the original text intact for exact matches
+    const originalText = text;
+
+    // Normalize the entire text before parsing
+    text = text
+        .toLowerCase() // Convert to lowercase
+        .normalize('NFD') // Decompose accents
+        .replace(/[\u0300-\u036f]/g, ''); // Remove diacritical marks
+
+    while (i < text.length) {
+        let node = trie.root;
+        let lastMatch = null;
+        let lastMatchIndex = -1;
+        let matchedOriginalEntry = null;
+
+        // Try to match as long a word as possible using the Trie
+        for (let j = i; j < text.length; j++) {
+            const char = text[j];
+
+            // Check if the current character is in the Trie node
+            if (!node.children[char]) {
+                break; // No more matches
+            }
+
+            node = node.children[char];
+
+            // If the node has a dictionary entry, remember this as a valid match
+            if (node.link) {
+                lastMatch = node.link; // Store the dictionary entry as the last valid match
+                lastMatchIndex = j;
+
+                // Check the original word array for an exact match
+                for (let originalWord of node.originalWords) {
+                    if (originalWord.toLowerCase() === originalText.slice(i, j + 1).toLowerCase()) {
+                        matchedOriginalEntry = node.link; // Store the exact dictionary entry if found
+                        break;
+                    }
+                }
+            }
+        }
+
+        // If a valid match was found, add the dictionary entry to the results
+        if (lastMatch) {
+            if (matchedOriginalEntry) {
+                results.push(matchedOriginalEntry); // Push the exact matched dictionary entry if found
+            } else {
+                results.push(lastMatch); // Otherwise, push the last valid dictionary entry
+            }
+            i = lastMatchIndex + 1; // Skip ahead to the end of the matched word
+        } else {
+            i++; // If no valid word was found, move to the next character
+        }
+    }
+
+    return results;
+}
+
 const fs = require('fs');
 const path = require('path');
 
@@ -109,4 +176,6 @@ for (const entry of dictionaryData) {
     trie.insert(entry.word, entry);
 }
 
-console.log(trie.searchPrefix("encarnacion", 100));
+const texto = "En un lugar de La Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lentejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mismo, y los días de entre semana se honraba con su vellorí de lo más fino. Tenía en su casa una ama que pasaba de los cuarenta, y una sobrina que no llegaba a los veinte, y un mozo de campo y plaza, que así ensillaba el rocín como tomaba la podadera. Frisaba la edad de nuestro hidalgo con los cincuenta años; era de complexión recia, seco de carnes, enjuto de rostro, gran madrugador y amigo de la caza. Quieren decir que tenía el sobrenombre de Quijada o Quesada, que en esto hay alguna diferencia en los autores que deste caso escriben; aunque, por conjeturas verosímiles, se deja entender que se llamaba Quijano. Pero esto importa poco a nuestro cuento; basta que en la narración dél no se salga un punto de la verdad.";
+
+console.log(parseText(trie, texto));
