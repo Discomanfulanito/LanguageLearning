@@ -11,7 +11,7 @@ export function App(){
     const [inputValue, setInputValue] = useState('');
     const [results, setResults] = useState([]);
     const [trie, setTrie] = useState(null);
-  
+    const [selectedResult, setSelectedResult] = useState(null);
     
     useEffect(() => {
         const initializeTrie = async () => {
@@ -36,14 +36,17 @@ export function App(){
             console.log('prevented %s',event.key)
         }
         else if(trie && inputValue !== ''){
-            const searchResults = trie.searchPrefix(inputValue);
+            setSelectedResult(null)
+
+            const searchResults = trie.searchPrefix(inputValue, 10);
             if (searchResults.length != 0)
             {
                 searchResults.forEach((new_result) =>
-                {
-                newResults.push({
-                    word: new_result.entry.word,
-                    description: new_result.entry.gloss[0] ? new_result.entry.gloss[0] : 'No description for the moment'
+                {   
+                    console.log(new_result)
+                    newResults.push({
+                        word: new_result.entry.word,
+                        description: new_result.entry.gloss[0] ? new_result.entry.gloss[0] : 'No description for the moment'
                     })
                 })
             
@@ -61,6 +64,12 @@ export function App(){
  
     };
 
+    const showSelectedResult = (index) => {
+        console.log("selecting")
+        setSelectedResult(index)
+        // añadirle dificultad, etimologia, genero , descripcion, si es n/v/adj 
+    }
+
     return(
         <>
             <div className="App-search">
@@ -68,13 +77,25 @@ export function App(){
                 <input type="text" value={inputValue} className="App-search-input" placeholder="Search words..." onKeyUp={load} onChange={(e) => setInputValue(e.target.value)}/>
             </div>
             <section className='App-result-container'>
-                {results.map((result, index) => (
+                {
+                selectedResult === null ? (
+                results.map((result, index) => (
                     <Result 
                         key={index}
                         word = {result.word}
                         description={result.description}
+                        index = {index}
+                        handleClick = {() => showSelectedResult(index)}
                     />
-                ))}
+                    ))
+                ) : (
+                    <Result
+                        word={results[selectedResult].word}
+                        description={results[selectedResult].description}
+                        isSelected={true}
+                        handleClick={() => nullSelectedResult()}
+                    />
+                )}
 
             </section>
             

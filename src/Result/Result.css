@@ -16,7 +16,7 @@
   cursor: pointer;
 }
 
-.search-result section
+.search-result section , .search-result-selected section
 {
   display: flex;
   flex-direction: row;
@@ -30,7 +30,7 @@
   color: #fff;
 }
 
-.search-result aside
+.search-result aside, .search-result aside
 {
   display: flex;
 }
@@ -57,3 +57,13 @@
 
   color: #B3B3B3;
 }
+
+
+.search-result-selected
+{
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+
+}
+

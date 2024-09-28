@@ -36,17 +36,6 @@ class Trie {
         return node.link; // Return the dictionary entry if it exists
     }
 
-    // Method for prefix search
-    searchPrefix(prefix) {
-        let node = this.root;
-        for (let char of prefix) {
-            if (!node.children[char]) {
-                return []; // Prefix not found
-            }
-            node = node.children[char];
-        }
-        return this.collectWords(node, prefix, null);
-    }
 
     // Capped version
     searchPrefix(prefix, cap) {

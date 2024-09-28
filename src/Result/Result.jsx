@@ -1,9 +1,9 @@
 import './Result.css'
 
-export function Result({word, description})
+export function Result({word, description, handleClick, isSelected=false, index})
 {
     return(
-        <div className="search-result">
+        <div className= {`search-result${isSelected ? '-selected' :""}`} onClick={() => handleClick(index)}>
             <section>
                 <h1 className='search-result-word'>{word}</h1>
             </section>
