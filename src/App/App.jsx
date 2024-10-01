@@ -1,9 +1,8 @@
 import './App.css'
 import { Result } from '../Result/Result.jsx'
 import React, { useState, useEffect } from 'react'
-
 import Trie from '/TRIE.js'
-
+import { ArrowButton } from '../ArrowButton/ArrowButton.jsx'
 
 
 export function App(){
@@ -26,7 +25,6 @@ export function App(){
 
     // función para cargar resultados al dar al enter
     const load = (event) => {
-
         let newResults = []
         if (inputValue === ''){
             setResults([])
@@ -43,7 +41,6 @@ export function App(){
             {
                 searchResults.forEach((new_result) =>
                 {   
-                    console.log(new_result)
                     newResults.push({
                         word: new_result.entry.word,
                         description: new_result.entry.gloss[0] ? new_result.entry.gloss[0] : 'No description for the moment'
@@ -65,7 +62,6 @@ export function App(){
     };
 
     const showSelectedResult = (index) => {
-        console.log("selecting")
         setSelectedResult(index)
         // añadirle dificultad, etimologia, genero , descripcion, si es n/v/adj 
     }
@@ -92,10 +88,14 @@ export function App(){
                     <Result
                         word={results[selectedResult].word}
                         description={results[selectedResult].description}
+                        handleClick={load}
+                        goBack={load}
                         isSelected={true}
-                        handleClick={() => nullSelectedResult()}
+                        showButton={true}
                     />
-                )}
+                )
+                }
+
 
             </section>
             
