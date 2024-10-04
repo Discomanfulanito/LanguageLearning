@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { App } from './App/App.jsx'
+import { App } from '/src/components/App/App.jsx'
 
 import './main.css'
 
